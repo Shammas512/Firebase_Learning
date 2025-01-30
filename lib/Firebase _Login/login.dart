@@ -1,5 +1,6 @@
 import 'package:firebase_learning/Firebase%20_Login/firebase_functions.dart';
 import 'package:firebase_learning/Firebase%20_Login/signup.dart';
+import 'package:firebase_learning/PhoneNumber_Verfication/phone_number.dart';
 import 'package:flutter/material.dart';
 
 class Login_page extends StatefulWidget {
@@ -20,14 +21,14 @@ class _Login_pageState extends State<Login_page> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Login Page"),
-        centerTitle: true,
-        backgroundColor: Color(0xFF4169E1),
-         shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.vertical(
-      bottom: Radius.circular(20), // Ye neeche curve add karega
-    ),)
-      ),
+          title: const Text("Login Page"),
+          centerTitle: true,
+          backgroundColor: Color(0xFF4169E1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(20), // Ye neeche curve add karega
+            ),
+          )),
       body: Column(
         children: [
           Padding(
@@ -111,7 +112,9 @@ class _Login_pageState extends State<Login_page> {
                         await myclass().googleLog(context);
                       },
                       child: const Text("Continue With Google")),
-                     const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -120,10 +123,25 @@ class _Login_pageState extends State<Login_page> {
                                 builder: (context) => const Signup_page()));
                       },
                       child: const Text("Create An Account")),
-
-                      const  SizedBox(height: 20,),
-
-                     
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PhoneNumber()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.black)),
+                      child: Center(child: Text("Login With Phone")),
+                    ),
+                  )
                 ],
               ),
             ),

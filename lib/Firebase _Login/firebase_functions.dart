@@ -9,21 +9,25 @@ class myclass {
   Future<UserCredential?> googleLog(BuildContext context) async {
     try {
       final googleUser = await GoogleSignIn().signIn();
+      print("User $googleUser");
       final googleAuth = await googleUser?.authentication;
-      
+      print("  id $googleAuth");
+
       final credential = GoogleAuthProvider.credential(
           idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
 
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      
 
       if (userCredential.user != null) {
         print("Google Sign-In Successful");
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => Home(
+                      
+                    )));
         // After login, navigate to Home
-      
       } else {
         print("Google Sign-In Failed");
       }
@@ -74,7 +78,10 @@ class myclass {
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(
+              builder: (context) => Home(
+                    name: email,
+                  )),
         );
       }
     } on FirebaseAuthException catch (e) {
