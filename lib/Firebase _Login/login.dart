@@ -26,7 +26,7 @@ class _Login_pageState extends State<Login_page> {
           backgroundColor: Color(0xFF4169E1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20), // Ye neeche curve add karega
+              bottom: Radius.circular(20),
             ),
           )),
       body: Column(

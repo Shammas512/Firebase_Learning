@@ -9,9 +9,7 @@ class myclass {
   Future<UserCredential?> googleLog(BuildContext context) async {
     try {
       final googleUser = await GoogleSignIn().signIn();
-      print("User $googleUser");
       final googleAuth = await googleUser?.authentication;
-      print("  id $googleAuth");
 
       final credential = GoogleAuthProvider.credential(
           idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
@@ -25,7 +23,7 @@ class myclass {
             context,
             MaterialPageRoute(
                 builder: (context) => Home(
-                      
+                      name: googleUser!.displayName.toString(),
                     )));
         // After login, navigate to Home
       } else {
@@ -80,7 +78,7 @@ class myclass {
           context,
           MaterialPageRoute(
               builder: (context) => Home(
-                    name: email,
+                    name: email.split("@").first.toUpperCase(),
                   )),
         );
       }

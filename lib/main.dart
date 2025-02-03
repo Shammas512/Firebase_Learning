@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_learning/Firebase%20_Login/home.dart';
 import 'package:firebase_learning/Firebase%20_Login/login.dart';
-import 'package:firebase_learning/Firebase_Realtime/post_data.dart';
 import 'package:flutter/material.dart';
 
 void main() async {

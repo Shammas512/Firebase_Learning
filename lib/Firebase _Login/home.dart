@@ -1,12 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:firebase_learning/Firebase%20_Login/login.dart';
-import 'package:firebase_learning/Firebase_Realtime/post_data.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class Home extends StatefulWidget {
   final String name;
@@ -20,6 +16,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final ref = FirebaseDatabase.instance.ref("Users/Messages");
   final messageContrller = TextEditingController();
+  final searchController = TextEditingController();
+  final updatecont = TextEditingController();
 
   @override
   void dispose() {
@@ -30,45 +28,80 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xff6A0DAD),
+        title: Text(
+          "Chat App ",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 14),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Expanded(
-              //     child: StreamBuilder(
-              //         stream: ref.onValue,
-              //         builder:
-              //             (context, AsyncSnapshot<DatabaseEvent> snapshot) {
-              //           if (!snapshot.hasData) {
-                          
-              //             return  Center(child: CircularProgressIndicator(),);
-              //           } else {
-              //             Map <dynamic,dynamic>map = snapshot.data!.snapshot.value as dynamic;
-              //             List <dynamic>list = [];
-              //             list.clear();
-              //             list = map.values.toList();
-              //             return ListView.builder(
-              //                 itemCount:
-              //                     snapshot.data!.snapshot.children.length,
-              //                 itemBuilder: (context, index) {
-              //                   return ListTile(
-              //                     title: Text(list[index]["id"]),
-              //                     subtitle: Text(list[index]["Message"]),
-              //                   );
-              //                 });
-              //           }
-              //         })),
+              SizedBox(
+                height: 30,
+              ),
+              TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                    hintText: "Search Message", border: OutlineInputBorder()),
+                onChanged: (String value) {
+                  setState(() {});
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Expanded(
                 child: FirebaseAnimatedList(
+                  defaultChild: Center(child: CircularProgressIndicator()),
                   query: ref,
-                  itemBuilder: (context, snapshot, index, animation) {
-                    return ListTile(
-                      title: Text(snapshot.child("id").value.toString()),
-                      subtitle:
-                          Text(snapshot.child("Message").value.toString()),
-                    );
+                  itemBuilder: (context, snapshot, animation, index) {
+                    final title = snapshot.child("Message").value.toString();
+                  
+                    if (searchController.text.isEmpty) {
+                      return ListTile(
+                          title: Text(snapshot.child("id").value.toString()),
+                          subtitle:
+                              Text(snapshot.child("Message").value.toString()),
+                          trailing: PopupMenuButton(
+                              icon: Icon(Icons.more_vert),
+                              itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                        value: 1,
+                                        child: ListTile(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            showupdate(title, snapshot.key!);
+                                          },
+                                          title: Text("Edit"),
+                                          leading: Icon(Icons.edit),
+                                        )),
+                                    PopupMenuItem(
+                                        value: 1,
+                                        child: ListTile(
+                                          onTap: () {
+                                            ref.child(snapshot.key!).remove();
+                                            Navigator.pop(context);
+                                          },
+                                          title: Text("Delete"),
+                                          leading: Icon(Icons.delete),
+                                        ))
+                                  ]));
+                    } else if (title.toLowerCase().contains(
+                        searchController.text.toLowerCase().toString())) {
+                      return ListTile(
+                        title: Text(snapshot.child("id").value.toString()),
+                        subtitle:
+                            Text(snapshot.child("Message").value.toString()),
+                      );
+                    }
+                    return Container();
                   },
                 ),
               ),
@@ -77,10 +110,11 @@ class _HomeState extends State<Home> {
                     color: Colors.black26,
                     borderRadius: BorderRadius.circular(20)),
                 height: 50,
-                width: 280,
+                width: 270,
                 child: TextFormField(
                   controller: messageContrller,
                   decoration: InputDecoration(
+                      hintText: "Send Message",
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(10)),
                 ),
@@ -92,6 +126,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (messageContrller.text.isNotEmpty) {
+           
             ref.push().set({
               "id": widget.name,
               "Message": messageContrller.text
@@ -108,5 +143,34 @@ class _HomeState extends State<Home> {
         child: Icon(Icons.send),
       ),
     );
+  }
+
+  Future<void> showupdate(String message, String id) async {
+    updatecont.text = message;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Update"),
+            content: Container(
+              child: TextField(
+                controller: updatecont,
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    ref.child(id).update({"Message": updatecont.text});
+                    Navigator.pop(context);
+                  },
+                  child: Text("Update"))
+            ],
+          );
+        });
   }
 }
