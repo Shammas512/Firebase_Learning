@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_learning/Firebase_FireStore/store.add.dart';
+import 'package:firebase_learning/Firebase_FireStore/store_home.dart';
 import 'package:firebase_learning/Firebase%20_Login/home.dart';
 import 'package:firebase_learning/Firebase%20_Login/login.dart';
+import 'package:firebase_learning/login_check.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -20,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
        
       ),
-      home: Login_page(),
+      home:  AuthCheck(),
     );
   }
 }

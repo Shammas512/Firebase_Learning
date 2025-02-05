@@ -21,14 +21,15 @@ class _Login_pageState extends State<Login_page> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          title: const Text("Login Page"),
-          centerTitle: true,
-          backgroundColor: Color(0xFF4169E1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-          )),
+        title: const Text("Login Page"),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF4169E1),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -40,10 +41,10 @@ class _Login_pageState extends State<Login_page> {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: const [
+                  colors: [
                     Color(0xFFE0E0E0), // Light Silver
                     Color(0xFFB0B0B0), // Medium Silver
                     Color(0xFF808080), // Dark Silver
@@ -54,9 +55,9 @@ class _Login_pageState extends State<Login_page> {
                     color: Colors.grey.shade700,
                     blurRadius: 10,
                     spreadRadius: 2,
-                    offset: Offset(4, 4),
+                    offset: const Offset(4, 4),
                   ),
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.white,
                     blurRadius: 10,
                     spreadRadius: 2,
@@ -77,7 +78,9 @@ class _Login_pageState extends State<Login_page> {
                   TextField(
                     controller: emailcont,
                     decoration: const InputDecoration(
-                        hintText: "Email", border: OutlineInputBorder()),
+                      hintText: "Email", 
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
@@ -85,67 +88,77 @@ class _Login_pageState extends State<Login_page> {
                   TextField(
                     controller: passcont,
                     decoration: const InputDecoration(
-                        hintText: "Password", border: OutlineInputBorder()),
+                      hintText: "Password", 
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          load = true;
-                        });
-                        await myclass()
-                            .login(emailcont.text, passcont.text, context);
-                        setState(() {
-                          load = false;
-                        });
-                      },
-                      child: load
-                          ? const CircularProgressIndicator()
-                          : const Text("Signin")),
+                    onPressed: () async {
+                      setState(() {
+                        load = true;
+                      });
+                      await myclass()
+                          .login(emailcont.text, passcont.text, context);
+                      setState(() {
+                        load = false;
+                      });
+                    },
+                    child: load
+                        ? const CircularProgressIndicator()
+                        : const Text("Signin"),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: () async {
-                        await myclass().googleLog(context);
-                      },
-                      child: const Text("Continue With Google")),
+                    onPressed: () async {
+                      await myclass().googleLog(context);
+                    },
+                    child: const Text("Continue With Google"),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Signup_page()));
-                      },
-                      child: const Text("Create An Account")),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Signup_page(),
+                        ),
+                      );
+                    },
+                    child: const Text("Create An Account"),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PhoneNumber()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PhoneNumber(),
+                        ),
+                      );
                     },
                     child: Container(
                       height: 50,
                       width: 250,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: Colors.black)),
-                      child: Center(child: Text("Login With Phone")),
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: const Center(child: Text("Login With Phone")),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
